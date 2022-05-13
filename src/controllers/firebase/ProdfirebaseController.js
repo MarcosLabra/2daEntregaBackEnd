@@ -1,7 +1,7 @@
 
 import admin from "firebase-admin";
 
-import serviceAccount from "../configs/backendcoder-8133d-firebase-adminsdk-fmjb3-4a3f0cfda2.js";
+import serviceAccount from "../../configs/backendcoder-8133d-firebase-adminsdk-fmjb3-4a3f0cfda2.js";
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
@@ -9,20 +9,20 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-class firebaseController {
+class ProdfirebaseController {
 
     constructor() {
         this.db = db;
         this.query = db.collection('products');
     }
-    
+
     save = async (element) => {
         try {
             const elements = await this.getAll();
             if (elements.length == 0) {
                 element.id = 1;
             } else {
-                element.id = elements[elements.length - 1].id + 1;
+                element.id = elements.length + 1;
             }
             element.timestamp = new Date().toISOString()
             let doc = this.query.doc()
@@ -36,26 +36,23 @@ class firebaseController {
 
     getAll = async () => {
         try {
-            const querySnapshot = await this.query.get()
-            let docs = querySnapshot.docs
-            const response = docs.map((doc) => (doc.data()))
-            return response
+            const query = await this.query.get()
+            return query.docs.map(doc => doc.data())
         } catch (err) {
-            console.log(err)
-            throw new Error('no se pudo obtener los productos')
+            throw new Error('no se pueden recuperar productos')
         }
     }
 
+
     getById = async (id) => {
         try {
-            console.log(id)
-			const doc = this.query.doc(`${id}`)
-			const item = await doc.get()
-			return item.data()
-		} catch (err) {
-			console.log(err)
-			throw new Error('Error pidiendo los datos')
-		}
+            const products = await this.getAll();
+            return  products.find(product => product.id == id);
+
+        } catch (err) {
+            console.log(err)
+            throw new Error('Error pidiendo los datos')
+        }
     }
 
     updateById = async (newElement, id) => {
@@ -143,4 +140,4 @@ class firebaseController {
     }
 }
 
-export default firebaseController;
+export default ProdfirebaseController;

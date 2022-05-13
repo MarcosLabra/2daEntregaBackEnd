@@ -29,11 +29,11 @@ switch (process.env.PERSISTENCIA) {
 		productsDao = new mongoDbDaoProducts()
 		break
 	case 'firebase':
-		const { default: firebaseDaoCarts } = await import('./cart/firebaseDaoCarts.js')
-		const { default: firebaseDaoProducts } = await import('./products/firebaseDaoProducts.js')
+		// const { default: firebaseDaoCarts } = await import('./cart/firebaseDaoCarts.js')
+		const { default: DaoFirebaseProduct } = await import('./products/firebaseDaoProducts.js')
 
-		cartDao = new firebaseDaoCarts()
-		productsDao = new firebaseDaoProducts()
+		// cartDao = new firebaseDaoCarts()
+		productsDao = new DaoFirebaseProduct()
 		break
 	default:
 		const { default: memoryDaoCarts } = await import('../daos/carts/memoryDaoCarts.js')

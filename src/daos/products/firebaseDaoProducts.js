@@ -1,9 +1,9 @@
-import firebaseController from  '../../controllers/firebase/firebaseController.js';
+import ProdfirebaseController from  '../../controllers/firebase/ProdfirebaseController.js';
 
 
-class DaoFirebaseProduct extends firebaseController{
-    constructor(db){
-        super(db)
+class DaoFirebaseProduct extends ProdfirebaseController{
+    constructor(){
+        super()
     }
 }
 
