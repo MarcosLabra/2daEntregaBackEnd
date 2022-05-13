@@ -46,9 +46,14 @@ class ProdfirebaseController {
 
     getById = async (id) => {
         try {
-            const products = await this.getAll();
-            return  products.find(product => product.id == id);
-
+            try {
+                const doc = this.query.doc(`${id}`)
+                const item = await doc.get()
+                return item.data()
+            } catch (err) {
+                console.log(err)
+                throw new Error('Error pidiendo los datos')
+            }
         } catch (err) {
             console.log(err)
             throw new Error('Error pidiendo los datos')
