@@ -1,45 +1,41 @@
 
-import admin from "firebase-admin";
-
-import serviceAccount from "../../configs/backendcoder-8133d-firebase-adminsdk-fmjb3-4a3f0cfda2.js";
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
-
-const db = admin.firestore();
+import config from "../../configs/config.js";
 
 class ProdfirebaseController {
 
     constructor() {
-        this.db = db;
-        this.query = db.collection('products');
-    }
-
-    save = async (element) => {
-        try {
-            const elements = await this.getAll();
-            if (elements.length == 0) {
-                element.id = 1;
-            } else {
-                element.id = elements.length + 1;
-            }
-            element.timestamp = new Date().toISOString()
-            let doc = this.query.doc()
-            await doc.create(element)
-            return doc.id
-        } catch (err) {
-            console.log(err)
-            throw new Error('falla en el guardado')
-        }
+        this.db = config.firebase.db;
+        this.query = this.db.collection('products')
     }
 
     getAll = async () => {
         try {
-            const query = await this.query.get()
-            return query.docs.map(doc => doc.data())
+            const querySnapshot = await this.query.get()
+            let docs = querySnapshot.docs
+            const response = docs.map((doc) => (doc.data()))
+
+            return response
         } catch (err) {
-            throw new Error('no se pueden recuperar productos')
+            console.log(err)
+            throw new Error('Error returning all products')
+        }
+    }
+
+    save = async (element) => {
+        try {
+            const elements = await this.getAll()
+            if (elements.length === 0) {
+                element.id = 1;
+            } else {
+                element.id = elements.map((e) => e.id).sort().reverse()[0] + 1;
+            }
+            element.timestamp = new Date().toISOString();
+            let doc = this.query.doc(`${element.id}`)
+            await doc.create(element)
+            return element
+        } catch (err) {
+            console.log(err)
+            throw new Error('falla en el guardado')
         }
     }
 
@@ -60,39 +56,50 @@ class ProdfirebaseController {
         }
     }
 
-    updateById = async (newElement, id) => {
+    updateById = async ( id, newValues) => {
+
         try {
-            const product = this.getById(id)
-            const toModify = this.query.doc(`${id}`)
-            if (product != undefined) {
-                if (newElement.nombre != undefined || '') {
-                    await toModify.update({
-                        nombre: newElement.nombre,
-                    })
-                }
-                if (newElement.descripcion != undefined || '') {
-                    await toModify.update({
-                        descripcion: newElement.descripcion,
-                    })
-                }
-                if (newElement.url != undefined || '') {
-                    await toModify.update({
-                        url: newElement.url,
-                    })
-                }
-                if (newElement.precio != undefined || '') {
-                    await toModify.update({
-                        precio: newElement.precio,
-                    })
-                }
-                return true
-            } else {
-                return false
-            }
-        } catch (err) {
-            console.log(err)
-            throw new Error('Error updating')
-        }
+			const product = this.getById(id)
+			const toModify = this.query.doc(`${id}`)
+			if (product != undefined) {
+				if (newValues.nombre != undefined || '') {
+					await toModify.update({
+						nombre: newValues.nombre,
+					})
+				}
+				if (newValues.descripcion != undefined || '') {
+					await toModify.update({
+						descripcion: newValues.descripcion,
+					})
+				}
+				if (newValues.foto != undefined || '') {
+					await toModify.update({
+						foto: newValues.foto,
+					})
+				}
+				if (newValues.precio != undefined || '') {
+					await toModify.update({
+						precio: newValues.precio,
+					})
+				}
+                if (newValues.stock != undefined || '') {
+					await toModify.update({
+						stock: newValues.stock,
+					})
+				}
+                if (newValues.codigo != undefined || '') {
+					await toModify.update({
+						codigo: newValues.codigo,
+					})
+				}
+				return true
+			} else {
+				return false
+			}
+		} catch (err) {
+			console.log(err)
+			throw new Error('Error updating')
+		}
     }
 
     deleteById = async (id) => {

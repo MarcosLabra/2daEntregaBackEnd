@@ -3,7 +3,7 @@ import config from "../../configs/config.js";
 
 try {
     mongoose.connect(config.mongoDb.url, config.mongoDb.options)
-    console.log("Connected to MongoDB");
+    console.log("Connected to MongoDB Cart");
 } catch (error) {
     console.log(error)
 };

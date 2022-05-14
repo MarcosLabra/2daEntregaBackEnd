@@ -29,12 +29,13 @@ routerProducto.
             }
         }
     })
-    .post(login, (req, res) => {
+    .post(login, async (req, res) => {
         if (req.params.id) {
             res.status(400).json('no es posible crear un producto con un ID ya que es generado automaticamente');
         } else {
-            productos.save(req.body);
-            res.status(201).json(`el producto '${req.body.nombre}' se ha creado correctamente`);
+            const product = await productos.save(req.body);
+            console.log(product);
+            res.status(201).json(`el producto '${product.nombre}' se ha creado correctamente`);
         }
     })
     .delete(login, async (req, res) => {
