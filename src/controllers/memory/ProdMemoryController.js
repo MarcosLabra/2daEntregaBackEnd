@@ -4,7 +4,7 @@ class memoryController {
         this.elements = [];
     }
 
-    async save(element) {
+    save = async (element) => {
         try {
             if (this.elements.length === 0) {
                 element.id = 1;
@@ -20,7 +20,7 @@ class memoryController {
         }
     }
 
-    getAll() {
+    getAll = () => {
         try {
             return [...this.elements];
         }
@@ -29,7 +29,7 @@ class memoryController {
         }
     }
 
-    deleteAll() {
+    deleteAll = () => {
         try {
             this.elements = [];
         } catch (error) {
@@ -37,16 +37,15 @@ class memoryController {
         }
     }
 
-    getById(id) {
+    getById = (id) => {
         try {
-            const element = this.elements.find(prod => prod.id == id);
-            return element;
+            return this.elements.find(prod => prod.id == id);
         }
         catch (error) {
             throw new error(error);
         }
     }
-    async deleteById(id) {
+    deleteById = async (id) => {
         try {
             const index = this.elements.findIndex(element => element.id == id);
             if (index === -1) {
@@ -60,7 +59,7 @@ class memoryController {
         }
     }
 
-    updateById(id, newElement) {
+    updateById = (id, newElement)=>{
         try {
             const element = this.elements.find(element => element.id == id);
             const index = this.elements.indexOf(element);

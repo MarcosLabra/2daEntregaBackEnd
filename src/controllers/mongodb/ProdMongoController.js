@@ -5,7 +5,7 @@ try {
     mongoose.connect(config.mongoDb.url, config.mongoDb.options)
     console.log("Connected to MongoDB Products");
 } catch (error) {
-    console.log(error)
+    console.log(error);
 };
 
 
@@ -14,10 +14,8 @@ class ProdMongoController {
         this.collection = mongoose.model(collection, schema);
     }
 
-    async save(element) {
+    save = async (element) => {
         try {
-            
-            const carrito = { id: this.container.length + 1, timestamp: Date.now(), productos: [] }
             element.timestamp = new Date().toISOString();
             const newElement = new this.collection(element);
             const result = await newElement.save();
@@ -27,11 +25,9 @@ class ProdMongoController {
         }
     }
 
-      getAll = async ()=> {
+    getAll = async () => {
         try {
-            const elements = await this.collection.find();
-            console.log(elements);
-            return elements;
+            return await this.collection.find();
         } catch (error) {
             throw new Error(error);
         }
@@ -47,8 +43,7 @@ class ProdMongoController {
 
     async updateById(id, element) {
         try {
-            const result = await this.collection.findByIdAndUpdate({ _id: id }, element);
-            return result;
+            return await this.collection.findByIdAndUpdate({ _id: id }, element);
         } catch (error) {
             throw new Error(error);
         }
@@ -56,9 +51,7 @@ class ProdMongoController {
 
     async deleteById(id) {
         try {
-
-            const result = await this.collection.findByIdAndDelete({ _id: id });
-            return result;
+            return await this.collection.findByIdAndDelete({ _id: id });
         } catch (error) {
             throw new Error(error);
         }
@@ -66,8 +59,7 @@ class ProdMongoController {
 
     async deleteAll() {
         try {
-            const result = await this.collection.deleteMany({});
-            return result;
+            return await this.collection.deleteMany({});
         } catch (error) {
             throw new Error(error);
         }

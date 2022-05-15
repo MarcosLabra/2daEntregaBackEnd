@@ -12,9 +12,7 @@ class ProdfirebaseController {
         try {
             const querySnapshot = await this.query.get()
             let docs = querySnapshot.docs
-            const response = docs.map((doc) => (doc.data()))
-
-            return response
+            return docs.map((doc) => (doc.data()))
         } catch (err) {
             console.log(err)
             throw new Error('Error returning all products')
@@ -27,7 +25,7 @@ class ProdfirebaseController {
             if (elements.length === 0) {
                 element.id = 1;
             } else {
-                element.id = elements.map((e) => e.id).sort().reverse()[0] + 1;
+                element.id = elements.map((el) => el.id).sort().reverse()[0] + 1;
             }
             element.timestamp = new Date().toISOString();
             let doc = this.query.doc(`${element.id}`)
@@ -123,7 +121,6 @@ class ProdfirebaseController {
             const batchSize = snapshot.size
             const deleteCollection = async (batchSize) => {
                 const orderCollections = this.query.orderBy('id').limit(batchSize)
-
                 return new Promise((resolve, reject) => {
                     deleteQueryBatch(resolve).catch(reject)
                 })

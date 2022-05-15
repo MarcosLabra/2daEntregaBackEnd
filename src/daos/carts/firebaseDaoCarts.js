@@ -3,7 +3,7 @@ import CartfirebaseController from  '../../controllers/firebase/CartfirebaseCont
 
 class DaoFirebaseCart extends CartfirebaseController{
     constructor(){
-        super()
+        super();
     }
 }
 

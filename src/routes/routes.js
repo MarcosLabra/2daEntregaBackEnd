@@ -16,14 +16,14 @@ routerProducto.
         if (req.params.id) {
             const product = await productos.getById(req.params.id);
             if (product) {
-                res.status(200).json(product)
+                res.status(200).json(product);
             } else {
                 res.status(404).send({ message: "Producto no encontrado" });
             }
         } else {
             const products = await productos.getAll();
             if (products) {
-                res.status(200).json(products)
+                res.status(200).json(products);
             } else {
                 res.status(404).send({ message: "Producto no encontrado" });
             }
@@ -40,16 +40,16 @@ routerProducto.
     })
     .delete(login, async (req, res) => {
         if (req.params.id) {
-            const product = await productos.deleteById(req.params.id)
+            const product = await productos.deleteById(req.params.id);
             if (product) {
-                res.status(200).json('producto eliminado correctamente')
+                res.status(200).json('producto eliminado correctamente');
             } else {
                 res.status(404).json({ error: 'No existe producto con dicho ID' });
             }
         } else {
-            const products = await productos.deleteAll()
+            const products = await productos.deleteAll();
             if (!products) {
-                res.status(200).json('todos los productos eliminados correctamente')
+                res.status(200).json('todos los productos eliminados correctamente');
             } else {
                 res.status(404).json({ error: 'error al borrar productos' });
             }
@@ -57,9 +57,12 @@ routerProducto.
 
     })
     .put(login, (req, res) => {
-        productos.updateById(req.params.id, req.body) ?
-            res.status(201).json(`el producto se ha actualizado correctamente`) :
-            res.status(404).json({ error: 'No existe producto con dicho ID' })
+        const product = productos.updateById(req.params.id, req.body);
+        if (product) {
+            res.status(201).json(`el producto se ha actualizado correctamente`)
+        } else {
+            res.status(404).json({ error: 'No existe producto con dicho ID' });
+        }
     })
 
 
@@ -76,8 +79,8 @@ routerCarrito.
     .get(async (req, res) => {
         const products = await carrito.getById(req.params.id);
         if (products.length > 0) {
-        res.status(200).json(products)
-        }else{
+            res.status(200).json(products);
+        } else {
             res.status(404).send({ message: "Carrito no encontrado" });
         }
 
@@ -85,7 +88,7 @@ routerCarrito.
     .post((req, res) => {
         const producto = carrito.addProduct(req.params.id, req.body);
         if (producto) {
-            res.status(201).json('producto agregado correctamente')
+            res.status(201).json('producto agregado correctamente');
         } else {
             res.status(404).json({ error: 'No existe carrito con dicho ID' });
         }
@@ -94,10 +97,10 @@ routerCarrito.
 routerCarrito.
     route('/:id/productos/:id_prod')
     .delete((req, res) => {
-        const deleteProd = carrito.deleteProduct(req.params.id, req.params.id_prod) 
+        const deleteProd = carrito.deleteProduct(req.params.id, req.params.id_prod);
         if (deleteProd) {
-            res.status(200).json(`el producto con el id:${req.params.id_prod} ha sido eliminado correctamente`) 
-        }else{
+            res.status(200).json(`el producto con el id:${req.params.id_prod} ha sido eliminado correctamente`);
+        } else {
             res.status(404).json({ error: 'No existe producto con dicho ID' });
         }
     })

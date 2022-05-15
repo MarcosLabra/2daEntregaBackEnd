@@ -5,10 +5,9 @@ class CartFileController {
         this.fileName = fileName;
     }
 
-    createCarrito() {
+    createCarrito = async ()=> {
         try {
             if (fs.existsSync(this.fileName)) {
-
                 const carritos = JSON.parse(fs.readFileSync(this.fileName, 'utf-8'));
                 const id = carritos.map(carrito => carrito.id).sort().reverse()[0] + 1;
                 const carrito = { id, timestamp: Date.now(), productos: [] };
@@ -24,11 +23,11 @@ class CartFileController {
             }
         }
         catch (error) {
-            console.log(error);
+            throw new error (error);
         }
     }
 
-    deleteById(id) {
+    deleteById = (id) => {
         try {
             const carritos = JSON.parse(fs.readFileSync(this.fileName, 'utf-8'));
             const carrito = carritos.find(carrito => carrito.id == id);
@@ -38,24 +37,23 @@ class CartFileController {
             }
             carritos.splice(index, 1);
             fs.writeFileSync(this.fileName, JSON.stringify(carritos));
-
         }
         catch (error) {
-            console.log(error);
+            throw new error (error);
         }
     }
 
-    getById(id) {
+    getById = (id) => {
         try {
             const carritos = JSON.parse(fs.readFileSync(this.fileName, 'utf-8'));
             return carritos.find(carrito => carrito.id == id);
         }
         catch (error) {
-            console.log(error);
+            throw new error (error);
         }
     }
 
-    addProduct(id, producto) {
+    addProduct = (id, producto) => {
         try {
             const carritos = JSON.parse(fs.readFileSync(this.fileName, 'utf-8'));
             const carrito = carritos.find(carrito => carrito.id == id);
@@ -71,11 +69,11 @@ class CartFileController {
             return carrito
         }
         catch (error) {
-            console.log(error);
+            throw new error (error);
         }
     }
 
-    deleteProduct(id, productoId) {
+    deleteProduct = (id, productoId)=>{
         try {
             const carritos = JSON.parse(fs.readFileSync(this.fileName, 'utf-8'));
             const carrito = carritos.find(carrito => carrito.id == id);
@@ -89,7 +87,7 @@ class CartFileController {
             return carrito;
         }
         catch (error) {
-            console.log(error);
+            throw new error (error);
         }
     }
 }

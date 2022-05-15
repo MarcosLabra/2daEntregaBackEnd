@@ -3,8 +3,8 @@ import ProdfirebaseController from  '../../controllers/firebase/ProdfirebaseCont
 
 class DaoFirebaseProduct extends ProdfirebaseController{
     constructor(){
-        super()
+        super();
     }
 }
 
-export default DaoFirebaseProduct
+export default DaoFirebaseProduct;

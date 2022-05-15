@@ -5,7 +5,7 @@ class ProdFileController {
         this.fileName = fileName;
     }
 
-    async save(element) {
+    save = async (element) => {
         try {
             if (fs.existsSync(this.fileName)) {
                 const elements = JSON.parse(fs.readFileSync(this.fileName, 'utf-8'));
@@ -26,12 +26,12 @@ class ProdFileController {
         }
     }
 
-    getAll() {
+    getAll = () => {
         try {
             if (fs.existsSync(this.fileName)) {
                 return JSON.parse(fs.readFileSync(this.fileName, 'utf-8'));
             } else {
-                return undefined
+                return undefined;
             }
         }
         catch (error) {
@@ -39,7 +39,7 @@ class ProdFileController {
         }
     }
 
-    deleteAll() {
+    deleteAll = () => {
         try {
             if (fs.existsSync(this.fileName)) {
                 fs.unlinkSync(this.fileName);
@@ -49,7 +49,7 @@ class ProdFileController {
         }
     }
 
-    getById(id) {
+    getById = (id) => {
         try {
             const elements = JSON.parse(fs.readFileSync(this.fileName, 'utf-8'));
             return elements.find(element => element.id == id);
@@ -58,7 +58,7 @@ class ProdFileController {
             throw new error(error);
         }
     }
-    deleteById(id) {
+    deleteById = (id) => {
         try {
             const elements = JSON.parse(fs.readFileSync(this.fileName, 'utf-8'));
             const element = elements.find(el => el.id == id);
@@ -70,13 +70,14 @@ class ProdFileController {
             } else {
                 elements.splice(index, 1);
                 fs.writeFileSync(this.fileName, JSON.stringify(elements));
-                return elements;}
+                return elements;
+            }
         }
         catch (error) {
             throw new error(error);
         }
     }
-    updateById(id, newElement) {
+    updateById = (id, newElement) => {
         try {
             const elements = JSON.parse(fs.readFileSync(this.fileName, 'utf-8'));
             const element = elements.find(element => element.id == id);

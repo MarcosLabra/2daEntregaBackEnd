@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 import config from "../../configs/config.js";
 
 try {
-    mongoose.connect(config.mongoDb.url, config.mongoDb.options)
+    mongoose.connect(config.mongoDb.url, config.mongoDb.options);
     console.log("Connected to MongoDB Cart");
 } catch (error) {
-    console.log(error)
+    console.log(error);
 };
 
 const prodSchema = new mongoose.Schema({
@@ -31,45 +31,44 @@ class CartMongoController {
 
     getAllCart = async () => {
         try {
-            return await this.collection.find()
+            return await this.collection.find();
         } catch (err) {
-            console.log(err)
-            throw new Error('Error')
+            throw new Error('Error');
         }
     }
 
-    async createCarrito() {
+    createCarrito = async () => {
         try {
             const carritos = await this.getAllCart();
             if (carritos.length === 0) {
-                const carrito = { id: 1, timestamp: Date.now(), productos: [] }
+                const carrito = { id: 1, timestamp: Date.now(), productos: [] };
                 const newElement = new this.collection(carrito);
                 const result = await newElement.save();
                 return result;
             } else {
-                const carrito = { id: carritos.length + 1, timestamp: Date.now(), productos: [] }
+                const carrito = { id: carritos.length + 1, timestamp: Date.now(), productos: [] };
                 const newElement = new this.collection(carrito);
                 const result = await newElement.save();
                 return result;
             }
         } catch {
-            throw new Error('Error')
+            throw new Error('Error');
         }
     }
 
     addProduct = async (id, newElement) => {
         try {
 
-            const cart = await this.getAllCart()
-            const cartIndex = cart.findIndex((e) => e.id === Number(id))
-            const productsInCart = cart[cartIndex].productos
+            const cart = await this.getAllCart();
+            const cartIndex = cart.findIndex((e) => e.id === Number(id));
+            const productsInCart = cart[cartIndex].productos;
             if (cart[cartIndex].productos.length === 0) {
                 newElement.id = 1;
             } else {
                 newElement.id = cart[cartIndex].productos.length + 1;
             }
             newElement.timestamp = Date.now();
-            productsInCart.push(newElement)
+            productsInCart.push(newElement);
             await this.collection.updateOne(
                 { id: id },
                 {
@@ -77,24 +76,23 @@ class CartMongoController {
                 }
             )
         } catch (error) {
-            console.log(error)
-            throw new Error('Error adding product')
+            console.log(error);
+            throw new Error('Error adding product');
         }
     }
 
 
     getById = async (id) => {
         try {
-            const cart = await this.collection.findOne({ id: id })
-            const products = cart?.productos
-
+            const cart = await this.collection.findOne({ id: id });
+            const products = cart?.productos;
             if (products) {
-                return products
+                return products;
             } else {
-                throw new Error('No existe el carrito')
+                throw new Error('No existe el carrito');
             }
         } catch {
-            throw new Error('Error pidiendo los datos')
+            throw new Error('Error pidiendo los datos');
         }
     }
 
